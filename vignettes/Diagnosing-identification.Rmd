@@ -1,5 +1,5 @@
 ---
-title: "Diagnosing-identification"
+title: "Diagnosing the identification of the model"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Diagnosing-identification}
@@ -15,14 +15,36 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Diagnosing identification of the model
+This document covers how to use the function `diagnose_identification` to diagnose the identification of the model numerically.
 
-This document covers how to use the function `diagnose_identification` for diagnosing identifiication of the model.
+Basically, `diagnose_identification` takes three steps.
+
+1. Approximate the Fisher information matrix.
+
+2. Find the condition number and the rank of the Fisher information matrix and asymptotic variance of parameters.
+
+3. Raise the flag that warns the large extent of the identification in a given model.
+
+It requires the five arguments below.
+
+1. `jags_code`
+
+2. `data`
+
+3. `variable.names`
+
+4. `ll_fun`: A log-likelihood function that takes `data` and `theta` as arguments. The type and structure of `data` must match the return type of `data_fun`.
+
+5. `data_fun`: A function that creates data with a given `theta` (a vector of parameters). `data_fun` will take an argument `args`, which includes `theta` and necessary input for generating data.
+
+
+## Revisiting cross-sectional studies data example
+
+Apply this function to the model and data in [Sampling-cross](Sampling-cross.html)
 
 ```{r setup}
 library(pimbayes)
 ```
-
 
 ```{r}
 ll_cross <- function(data, theta){
@@ -67,3 +89,5 @@ diagnose_identification(jags_code, data,
                         c("se","sp","pi[1]","pi[2]","pi[3]"),
                         ll_cross, data_cross)
 ```
+
+

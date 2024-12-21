@@ -1,5 +1,5 @@
 ---
-title: "Sampling-pigeons"
+title: "Sampling with Pigeons.jl"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib  
 vignette: >
@@ -22,11 +22,11 @@ library(pimbayes)
 
 ## Sampling with Pigeons.jl
 
-It is possible to sample from posteriors using julia Package \texttt{Pigeons.jl} [@surjanovic2023pigeons], which might ease MCMC sampling with the partially identified model thanks to the of non-reversible parallel tempering [@syed-2021-Non-Reversible]. 
+It is possible to sample from posteriors using julia Package \texttt{Pigeons.jl} [@surjanovic2023pigeons], which might ease MCMC sampling with the partially identified model thanks to the non-reversible parallel tempering [@syed-2021-Non-Reversible]. 
 
-### Multithreaded option for pigeons sampling
+### Multithreaded option for `pigeons` sampling
 
-Unlike other functions in this \texttt{istp} package, the number of threads for julia session is crucial due to the multithreaded options. Since it is not possible to change the number of threads of julia session once it starts, if you would like to use multithreaded option but already intialize without setting the number of threads to be used, restart of R is required. 
+Unlike other functions in this \texttt{istp} package, the number of threads for the julia session is crucial due to the multithreaded options. Since it is impossible to change the number of threads of the julia session once it starts, a restart of R is required if you would like to use the multithreaded option but have already initialized it without setting the number of threads. 
 
 When R starts or restarts
 
@@ -34,7 +34,7 @@ When R starts or restarts
 init_julia_session_multi(threads = 4)
 ```
 
-It will setup fresh julia session with given number of threads. 
+It will set up a fresh julia session with a given number of threads. 
 
 ```{r}
 data(small_count)
@@ -68,4 +68,5 @@ pigeons_plots(pt)
 ```
 
 ## Reference
+
 

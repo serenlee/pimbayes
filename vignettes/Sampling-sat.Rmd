@@ -1,5 +1,5 @@
 ---
-title: "Sampling-sat"
+title: "ISTP sampling for incomplete multivariate binary data"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib  
 vignette: >
@@ -22,25 +22,23 @@ knitr::opts_chunk$set(
 library(pimbayes)
 ```
 
-## Saturated logistic regression with incomplete outcome data
+Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors on an example of saturated logistic regression with incomplete outcome data introduced in [@lee-2024-issues].
 
-Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors on example of saturated logistic regression with incomplete outcome data, which is introduced in [@lee-2024-issues].
+The data has three components: the binary response variable $Y$, the binary independent variable $\mathbf{X}  = (X_1, \dots, X_p)^T$, and the indicator variable $R$, which indicates the missingness of $Y$. The binary variable $R$ is 1 when $Y$ is observed and $0$ when $Y$ is unobserved.
 
-The data has three components, the binary response variable $Y$, the binary independent variable $\mathbf{X}  = (X_1, \dots, X_p)^T$, and the indicator variable $R$, which indicates missingniess of $Y$. The binary variable $R$ is 1 when $Y$ is observed, and $0$ when $Y$ is unobserved.
-
-To ease and simplify the calculation and structure of the model, a design matrix of $\mathbf{X}$ and a vector $\xdes \in \mathbb{R}^{2^p}$ representing row of it is used.
+To ease and simplify the calculation and structure of the model, a design matrix of $\mathbf{X}$ and a vector $\xdes \in \mathbb{R}^{2^p}$ representing a row of it is used.
 In mathematical notation, $\xdes  = (X_{0\dots0},\dots,X_{1,\dots1})$ and each entry $X_{i_{1},i_{2},\dots ,i_{p}} = 1$ is 1 if and only if $X_{1} = i_1, X_2 = i_{2}, \dots, X_p = i_p$.
 
 
 \newcommand{\bbR}{\mathbb{R}}
 
-There are multiple vectors of parameters of interests,
+There are multiple vectors of parameters of interest,
 - $\alpha  = (p_{0\dots0}, \dots,p_{1\dots1})^T$ where  $\alpha$ is the simplex of length $2^p$;
 - $\beta  \in \mathbb{R}^{2^p};$
 - $\gamma \in \mathbb{R}^{2^p};$
 - $\delta \in \mathbb{R}^{2^p}.$
 
-Finally model is specified with
+Finally, the model is specified with
 
 $\mathbf{X}_{des}  \sim Multinom(\alpha,1)$
 $(Y \mid \mathbf{X}_{des})  \sim Bern(\expit(\mathbf{X}_{des} {\beta}));\\
@@ -95,7 +93,7 @@ for(i in 1:p2){
 
 ## Sampling
 
-When data and JAGS code with desired posterior sample size are given, the function sampling will return posterior samples along with ESS.
+When data and JAGS code are given with the desired posterior sample size, the function sampling will return posterior samples along with ESS.
 
 ```{r message = F}
 n = length(small_sat$r)
@@ -110,4 +108,5 @@ head(results$samples)
 
 
 # References
+
 

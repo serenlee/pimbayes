@@ -1,8 +1,8 @@
 ---
-title: "Sampling-sat-manual"
+title: "Sampling with ISTP manually"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Sampling-sat-manual}
+  %\VignetteIndexEntry{Sampling-cross-manual}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,10 +18,20 @@ knitr::opts_chunk$set(
 library(pimbayes)
 ```
 
-## Manually using ISTP algorithm
+If required functions and variable names could be provided, a function `istp.manual` could perform sampling with the ISTP algorithm.
 
-If required functions and variable names could be provided, function `istp.manual` performs sampling with the ISTP algorithm.
+Required arguments are:
 
+1. `posterior_fun`: A function generating samples from convenience posteriors, which is proportional to the multiplication of convenience priors and likelihoods.
+2. `h_inv`: $h^{-1}(\phi,\lambda) = \theta$.
+3. `N`: Sample size
+4. `weight_fun`: The function that calculates weight. It will take `theta_matrix`, a matrix of posterior samples of parameters in original parameterization, and `deter`, a vector of determinants.
+5. `var_name`: A vector of names of variables.
+
+Let's apply this function to the example.
+Please see [Sampling-cross](Sampling-cross.html) for the example specification.
+
+#### Inputs
 ```{r}
 data(small_cross)
 data = small_cross
@@ -29,38 +39,43 @@ posterior_fun<-function(N){
   eta<- rdirichlet(N,data+1)
   se <- rbeta(N,25,3)
   sp <- rbeta(N,30,1.5)
-  phi_lambda_matrix = cbind(eta[,1:3],se,sp)
-  colnames(phi_lambda_matrix) = c(paste0("eta[",1:3,"]"),"se","sp")
+  phi_lambda_matrix = cbind(se,sp,eta[,1:3])
+  colnames(phi_lambda_matrix) = c("se","sp", paste0("eta[",1:3,"]"))
   return(phi_lambda_matrix)
 }
 valid_A <-function(theta){
-  pi = theta[1:3]
+  pi = theta[3:5]
   pi = c(pi,1-sum(pi))
   all(pi>=0 & pi <=1)
 }
 weight_fun<-function(theta_matrix, deter){
   apply(theta_matrix, 1,
-        function(theta) ifelse(valid_A(theta),(theta[4]+theta[5]-1)^(-2),0))
+        function(theta) ifelse(valid_A(theta),(theta[1]+theta[2]-1)^(-2),0))
 }
 
 h_cross_inv <- function(phiLambda) {
-  eta11 = ifelse(length(names(phiLambda)) == 5, phiLambda["eta[1]"],phiLambda[1])
-  eta12 = ifelse(length(names(phiLambda)) == 5, phiLambda["eta[2]"],phiLambda[2])
-  eta21 = ifelse(length(names(phiLambda)) == 5, phiLambda["eta[3]"],phiLambda[3])
-  se = ifelse(length(names(phiLambda)) == 5, phiLambda["se"],phiLambda[4])
-  sp = ifelse(length(names(phiLambda)) == 5, phiLambda["sp"],phiLambda[5])
+  eta11 = phiLambda[3]
+  eta12 = phiLambda[4]
+  eta21 = phiLambda[5]
+  se = phiLambda[1]
+  sp = phiLambda[2]
   eta22 = 1 - eta11 - eta12 - eta21
   denom = se+sp-1
   pi11 = 1/denom*(sp*eta11 + (sp-1)*eta21)
   pi12 = 1/denom*(sp*eta12 + (sp-1)*eta22)
   pi21 = 1/denom*((se-1)*eta11 + se*eta21)
-  return(c(pi11,pi12,pi21,se,sp))
+  return(c(se,sp,pi11,pi12,pi21))
 }
-var_name = c(paste0("pi","[",c(11,12,21),"]"),"se","sp")
+var_name = c("se","sp",paste0("pi","[",c(11,12,21),"]"))
 results = istp.manual(posterior_fun, h_cross_inv, 15000, weight_fun, var_name)
+```
 
+#### Results
+```{r}
 results$ess
 
 head(results$samples)
 ```
+
+
 

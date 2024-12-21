@@ -1,5 +1,5 @@
 ---
-title: "Sampling-cross"
+title: "ISTP sampling for cross-sectional studies data"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib  
 vignette: >
@@ -19,13 +19,11 @@ knitr::opts_chunk$set(
 library(pimbayes)
 ```
 
-## Cross-sectional studies
-
 ### Problem specification
 
 Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors for the problem called cross-sectional studies [@Pirikahu-2021-bcicc].
 
-Data are given by a two by two table. 
+Data is given in a two-by-two table. 
 
 |               |$D^+$          | $D^-$ |
 | ------------- |:-------------:| :-----:|
@@ -34,7 +32,7 @@ Data are given by a two by two table.
 
 where $D+, D^-$ indicate diseased or not and $E^+,E^-$ indicate exposure to the risk factor or not.
 Parameter of interests are test sensitivity, $S_e$, specificity, $S_p$, and probabilities of each cell, $\pi_{11} = Pr(E^+ \cap D^+), \pi_{12} = Pr(E^+ \cap  D^-), \pi_{21} = Pr(E^- \cap  D^+)$
-However, since this test is imperfect, actual model is specified with multinomial distribution with $\eta_{ij}$ instead of $\pi_{ij}$ where \begin{align}
+However, since this test is imperfect, the actual model is specified with multinomial distribution with $\eta_{ij}$ instead of $\pi_{ij}$ where \begin{align}
 \eta_{11} &= Pr(T^+ \cap D^+) &= S_e \pi_{11} + (1-S_p)\pi_{21}\\
 \eta_{12} &= Pr(T^+ \cap D^-) &=S_e \pi_{12} + (1-S_e)\pi_{22}\\
 \eta_{21} &= Pr(T^- \cap D^+) &= S_p \pi_{21} + (1-S_e)\pi_{11}\\
@@ -46,10 +44,10 @@ data(cross)
 print(cross)
 ```
 
-Data is a vector that has four entries, where each entry represents the count of each category $(1,1), (1,2), (2,1), (2,2)$ in below contingency table.
+The data is a vector with four entries, each representing the count of each category $(1,1), (1,2), (2,1), (2,2)$ in the contingency table below.
 
 
-According JAGS code is:
+The applicable JAGS code is:
 
 ```{r}
 jags_code <-
@@ -65,7 +63,7 @@ jags_code <-
 }"
 ```
 
-When data and JAGS code with desired posterior sample size are given, the function sampling will return posterior samples along with ESS.
+When data and JAGS code are given with the desired posterior sample size, the function sampling will return posterior samples along with ESS.
 
 ```{r message = F}
 data <- list(y = cross, n = sum(cross))
@@ -76,3 +74,5 @@ head(results$samples)
 ```
 
 # References
+
+
