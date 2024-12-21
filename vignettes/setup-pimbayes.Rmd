@@ -1,0 +1,34 @@
+---
+title: "setup-pimbayes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{setup-pimbayes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(pimbayes)
+```
+
+
+```{r eval = F}
+setup(installJulia = TRUE)
+```
+
+```{r eval = F}
+setup(installJulia = FALSE)
+```
+
+```{r eval = F}
+# specify julia_path
+setup(installJulia = FALSE, JULIA_HOME = julia_path)
+```
+

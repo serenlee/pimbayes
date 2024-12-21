@@ -1,0 +1,113 @@
+---
+title: "Sampling-sat"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib  
+vignette: >
+  %\VignetteIndexEntry{Sampling-sat}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+\newcommand{\xdes}{\mathbf{X}_{des}}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\expit}{expit}
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(pimbayes)
+```
+
+## Saturated logistic regression with incomplete outcome data
+
+Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors on example of saturated logistic regression with incomplete outcome data, which is introduced in [@lee-2024-issues].
+
+The data has three components, the binary response variable $Y$, the binary independent variable $\mathbf{X}  = (X_1, \dots, X_p)^T$, and the indicator variable $R$, which indicates missingniess of $Y$. The binary variable $R$ is 1 when $Y$ is observed, and $0$ when $Y$ is unobserved.
+
+To ease and simplify the calculation and structure of the model, a design matrix of $\mathbf{X}$ and a vector $\xdes \in \mathbb{R}^{2^p}$ representing row of it is used.
+In mathematical notation, $\xdes  = (X_{0\dots0},\dots,X_{1,\dots1})$ and each entry $X_{i_{1},i_{2},\dots ,i_{p}} = 1$ is 1 if and only if $X_{1} = i_1, X_2 = i_{2}, \dots, X_p = i_p$.
+
+
+\newcommand{\bbR}{\mathbb{R}}
+
+There are multiple vectors of parameters of interests,
+- $\alpha  = (p_{0\dots0}, \dots,p_{1\dots1})^T$ where  $\alpha$ is the simplex of length $2^p$;
+- $\beta  \in \mathbb{R}^{2^p};$
+- $\gamma \in \mathbb{R}^{2^p};$
+- $\delta \in \mathbb{R}^{2^p}.$
+
+Finally model is specified with
+
+$\mathbf{X}_{des}  \sim Multinom(\alpha,1)$
+$(Y \mid \mathbf{X}_{des})  \sim Bern(\expit(\mathbf{X}_{des} {\beta}));\\
+(R \mid \mathbf{X}_{des}, Y = 0)
+ \sim Bern(\expit(\mathbf{X}_{des} \gamma));\\
+(R \mid \mathbf{X}_{des}, Y = 1)
+ \sim Bern(\expit(\mathbf{X}_{des} (\expit(\logit(\gamma+\delta))))).$
+ 
+Priors for these parameters are
+\begin{equation}
+\begin{aligned}
+        \alpha & \sim Dir(\mathbf{1}_{2^p}), &  \\
+        \beta_{i} & \sim Unif(0,1) & (i = 0, \dots ,2^p-1), \\
+        \gamma_{i} & \sim Unif(0,1) & (i = 0, \dots ,2^p-1), \\
+    \delta_{i} & \sim Normal(0, \sigma^2) &  (i = 0, \dots ,2^p-1). 
+\end{aligned}
+\end{equation}
+
+
+## Data
+
+
+```{r}
+data(small_sat)
+head(small_sat$x)
+head(small_sat$y)
+```
+
+## JAGS Code
+
+```{r}
+jags_code  <- "
+model{
+for (i in 1:n) {
+    x[i, 1:p2] ~ dmulti(px[1:p2],1)
+    y[i] ~ dbern(inprod(x[i,1:p2], py_x[1:p2]))
+    r[i] ~ dbern(pr[i])
+    pr[i] <- (y[i]) * inprod(x[i,1:p2], pr_xy1[1:p2]) + abs(y[i]-1) * inprod(x[i,1:p2], pr_xy0[1:p2])
+}
+for(i in 1:p2){
+    pr_xy1[i] <- ilogit(log_or_r[i] + logit(pr_xy0[i]))
+}
+  px[1:p2] ~ ddirich(alpha)
+  for(i in 1:p2) {
+      py_x[i] ~ dunif(0, 1)
+      pr_xy0[i] ~ dunif(0, 1)
+      log_or_r[i] ~ dnorm(0, tau)
+    }
+}"
+```
+
+
+## Sampling
+
+When data and JAGS code with desired posterior sample size are given, the function sampling will return posterior samples along with ESS.
+
+```{r message = F}
+n = length(small_sat$r)
+p = log2(dim(small_sat$x)[2])
+sigma = 0.5 # Hyperparameter
+data <- c(small_sat, list(n = n, p2 = 2^p, tau = 1/sigma^2, alpha = rep(1,2^p)))
+results = sampling(jags_code, data, type = "sat", N = 1000)
+results$ess
+head(results$samples)
+```
+
+
+
+# References
+

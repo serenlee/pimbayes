@@ -165,7 +165,7 @@ valid_A <-function(theta){
   all(pi>=0 & pi <=1)
 }
 
-# h function in Example 2
+# h function
 h_cross <- function(theta){
   pi11 = ifelse(length(names(theta)) == 5, theta["pi[1]"],theta[1])
   pi12 = ifelse(length(names(theta)) == 5, theta["pi[2]"],theta[2])
@@ -180,7 +180,7 @@ h_cross <- function(theta){
   return(c(eta11,eta12,eta21,se,sp))
 }
 
-# h inverse function in Example 2
+# h inverse function
 h_cross_inv <- function(phiLambda) {
   eta11 = ifelse(length(names(phiLambda)) == 5, phiLambda["eta[1]"],phiLambda[1])
   eta12 = ifelse(length(names(phiLambda)) == 5, phiLambda["eta[2]"],phiLambda[2])

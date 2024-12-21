@@ -1,0 +1,71 @@
+---
+title: "Sampling-pigeons"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib  
+vignette: >
+  %\VignetteIndexEntry{Sampling-pigeons}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+```
+
+```{r setup}
+library(pimbayes)
+```
+
+## Sampling with Pigeons.jl
+
+It is possible to sample from posteriors using julia Package \texttt{Pigeons.jl} [@surjanovic2023pigeons], which might ease MCMC sampling with the partially identified model thanks to the of non-reversible parallel tempering [@syed-2021-Non-Reversible]. 
+
+### Multithreaded option for pigeons sampling
+
+Unlike other functions in this \texttt{istp} package, the number of threads for julia session is crucial due to the multithreaded options. Since it is not possible to change the number of threads of julia session once it starts, if you would like to use multithreaded option but already intialize without setting the number of threads to be used, restart of R is required. 
+
+When R starts or restarts
+
+```{r}
+init_julia_session_multi(threads = 4)
+```
+
+It will setup fresh julia session with given number of threads. 
+
+```{r}
+data(small_count)
+sigma = 0.5 #Hyperparameter, prior variance of alpha1
+data = c(small_count, list(n = length(small_count$r), tau = 1/sigma^2))
+jags_code <- "model{
+  for (i in 1:n) {
+    r[i] ~ dbern(pr[i])
+    pr[i] <- ilogit(y[i] * alpha1 + alpha0)
+    y[i] ~ dpois(mu)
+  }
+    mu ~ dgamma(1,1)
+    alpha0 ~ dnorm(0, 0.1)
+    alpha1 ~ dnorm(0, tau)
+}
+"
+pt = sampling(jags_code, data, "pigeons", extract_variable_names = c("mu","alpha0","alpha1"), n_chains =  4, n_rounds = 4)
+```
+
+
+Using functions `pigeons_samples` and `pigeons_plots`, it is possible to check the results.
+
+```{r}
+head(pigeons_samples(pt))
+```
+
+It supports trace and density plots.
+
+```{r}
+pigeons_plots(pt)
+```
+
+## Reference
+
