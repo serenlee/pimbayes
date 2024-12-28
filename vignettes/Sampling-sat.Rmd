@@ -81,7 +81,7 @@ for (i in 1:n) {
 for(i in 1:p2){
     pr_xy1[i] <- ilogit(log_or_r[i] + logit(pr_xy0[i]))
 }
-  px[1:p2] ~ ddirich(alpha)
+  px[1:p2] ~ ddirich(Int64wrapper(ones(p2)))
   for(i in 1:p2) {
       py_x[i] ~ dunif(0, 1)
       pr_xy0[i] ~ dunif(0, 1)
@@ -99,7 +99,7 @@ When data and JAGS code are given with the desired posterior sample size, the fu
 n = length(small_sat$r)
 p = log2(dim(small_sat$x)[2])
 sigma = 0.5 # Hyperparameter
-data <- c(small_sat, list(n = n, p2 = 2^p, tau = 1/sigma^2, alpha = rep(1,2^p)))
+data <- c(small_sat, list(n = n, p2 = 2^p, tau = 1/sigma^2))
 results = sampling(jags_code, data, type = "sat", N = 1000)
 results$ess
 head(results$samples)

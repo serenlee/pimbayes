@@ -19,6 +19,9 @@ parse_jags_code <- function(jags_code, data, is_data_info_required = T) {
   require(JuliaCall)
   julia_library("JuliaBUGS")
   julia_library("LinearAlgebra")
+  julia_command("JuliaBUGS.@register_primitive function Int64wrapper(vec::Vector)
+    return Int64.(vec)
+end")
   julia_command("JuliaBUGS.@register_primitive function c(a...)
     return [a...]
 end")

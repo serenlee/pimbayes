@@ -34,8 +34,7 @@
 #' sigma = 0.5 #Hyperparameter, prior variance of log odds ratios
 #' data = c(small_sat, list(n = length(small_sat$r),
 #'   p2 = dim(small_sat$x)[2],
-#'   tau = 1/sigma^2,
-#'   alpha = rep(1,dim(small_sat$x)[2])))
+#'   tau = 1/sigma^2))
 #' jags_code  <- "model{
 #'   for (i in 1:n) {
 #'     x[i, 1:p2] ~ dmulti(px[1:p2],1)
@@ -46,7 +45,7 @@
 #'   for(i in 1:p2){
 #'     pr_xy1[i] <- ilogit(log_or_r[i] + logit(pr_xy0[i]))
 #'   }
-#'   px[1:p2] ~ ddirich(alpha)
+#'   px[1:p2] ~ ddirich(Int64wrapper(ones(p2)))
 #'   for(i in 1:p2) {
 #'     py_x[i] ~ dunif(0, 1)
 #'     pr_xy0[i] ~ dunif(0, 1)

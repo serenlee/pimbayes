@@ -1,6 +1,6 @@
 # R Package pimbayes
 
-## Comprehensive tools for Bayesian inference with the partially identified model
+#### Comprehensive tools for Bayesian inference with the partially identified model
 
 
 ### How to use `pimbayes`
