@@ -13,7 +13,7 @@
 ``` R
 # install.packages("devtools")
 library(devtools)
-install_github("https://github.com/serenlee/pimbayes")
+install_github("https://github.com/serenlee/pimbayes", dependencies = TRUE)
 ```
 
 3. Setup julia and julia packages
