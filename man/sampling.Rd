@@ -11,7 +11,8 @@ sampling(
   extract_variable_names = NULL,
   n_chains = NULL,
   n_rounds = NULL,
-  N = NULL
+  N = NULL,
+  extended_traces = F
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ n_chains * 2^(n_rounds)}
 n_chains * 2^(n_rounds)}
 
 \item{N}{type sat and cross will generate the posterior sample of size N}
+
+\item{extended_traces}{logical. If TRUE, all serialized chains are recorded.}
 }
 \value{
 Either a list or julia object. Results including samples.

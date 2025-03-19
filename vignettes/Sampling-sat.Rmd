@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(digits = 3)
 ```
 
 ```{r setup}
@@ -102,7 +103,9 @@ sigma = 0.5 # Hyperparameter
 data <- c(small_sat, list(n = n, p2 = 2^p, tau = 1/sigma^2))
 results = sampling(jags_code, data, type = "sat", N = 1000)
 results$ess
-head(results$samples)
+head(results$samples[,1:7],3)
+head(results$samples[,8:11],3)
+head(results$samples[,12:15],3)
 ```
 
 

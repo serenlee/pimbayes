@@ -75,7 +75,7 @@ diagnose_identification<-function(jags_code, data, variable.names, ll_fun, data_
   fisher = (find_fisher(20, 2000, ll_cross, data_cross, c(list(theta = theta), data)))
   cond = pracma::cond(fisher)
   rank = pracma::Rank(fisher)
-  list(condition_number = cond, rank = rank, var = 1/diag(fisher))
+  list(condition_number = cond, rank = rank, var = diag(pracma::inv(fisher)))
 }
 
 ll_cross <- function(data, theta){

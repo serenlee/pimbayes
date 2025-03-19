@@ -1,6 +1,7 @@
 ---
 title: "Sampling with Pigeons.jl"
-output: rmarkdown::html_vignette
+output: 
+  latex_document
 bibliography: biblio.bib  
 vignette: >
   %\VignetteIndexEntry{Sampling-pigeons}
@@ -64,6 +65,13 @@ head(pigeons_samples(pt))
 It supports trace and density plots.
 
 ```{r}
+pigeons_plots(pt)
+```
+
+It supports trace and density plots.
+
+```{r}
+pt = sampling(jags_code, data, "pigeons", extract_variable_names = c("mu","alpha0","alpha1"), n_chains =  4, n_rounds = 4, extended_traces = T)
 pigeons_plots(pt)
 ```
 

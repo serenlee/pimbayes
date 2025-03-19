@@ -14,6 +14,7 @@
 #' @param n_rounds n_rounds for Pigeons.jl The size of final sample is
 #' n_chains * 2^(n_rounds)
 #' @param N type sat and cross will generate the posterior sample of size N
+#' @param extended_traces logical. If TRUE, all serialized chains are recorded.
 #' @return Either a list or julia object. Results including samples.
 #' @examples
 #' jags_code <-
@@ -70,10 +71,10 @@
 #' sampling(jags_code, data, "pigeons", n_chains =  4, n_rounds = 4)
 #' @export
 sampling<-function(jags_code, data, type = c("sat", "cross", "pigeons"), extract_variable_names = NULL,
-                   n_chains  = NULL, n_rounds = NULL, N = NULL){
+                   n_chains  = NULL, n_rounds = NULL, N = NULL, extended_traces = F){
   if(type == "pigeons") {
     stopifnot(!is.null(n_chains) && !is.null(n_rounds))
-    results_list = pigeons(jags_code, data, extract_variable_names, n_chains, n_rounds)
+    results_list = pigeons(jags_code, data, extract_variable_names, n_chains, n_rounds, extended_traces)
   } else if (type == "sat") {
     stopifnot(!is.null(N))
     results_list = istp.sat(jags_code,data, N)
@@ -176,14 +177,14 @@ istp.cross<-function(jags_code, data, N){
 }
 
 # Internal function
-pigeons<-function(model.object, data, extract_variable_names, n_chains, n_rounds){
-  arguments = match.call(expand.dots = T)
+pigeons<-function(model.object, data, extract_variable_names, n_chains, n_rounds, extended_traces){
   require(JuliaCall)
   julia_library("Pigeons")
   parse_jags_code(jags_code,data, FALSE)
   julia_command("target= JuliaBUGSPath(model)")
   julia_assign("n_chains",n_chains)
   julia_assign("n_rounds",n_rounds)
+  julia_assign("et", extended_traces)
   multithreaded = FALSE
   if(julia_eval("Threads.nthreads()") > 1){
     multithreaded = TRUE
@@ -210,7 +211,7 @@ pigeons<-function(model.object, data, extract_variable_names, n_chains, n_rounds
   julia_command("pt = pigeons(
         target = target,
         record = [traces; record_default()],
-        extended_traces = true,
+        extended_traces = et,
         extractor = varExtractor(),
         n_chains = Int64(n_chains),
         n_rounds = Int64(n_rounds),

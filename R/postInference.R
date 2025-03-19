@@ -24,6 +24,9 @@ pigeons_samples<-function(pt){
 #' @export
 pigeons_plots<-function(pt){
   julia_library("MCMCChains")
+  julia_assign("result",pt)
+  julia_command("samples = Chains(result)")
+  julia_library("MCMCChains")
   julia_library("StatsPlots")
   julia_command("StatsPlots.plot(samples)")
 }
