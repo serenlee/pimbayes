@@ -27,7 +27,7 @@ It is possible to obtain MCMC samples from posterior distributions using the \te
 
 ### Multithreaded option for `pigeons` sampling
 
-Unlike other functions in this \texttt{pimbayes} package, the number of threads for the \texttt{julia} session is crucial due to the \texttt{multithreaded} options. The default option of \texttt{JuliaCall} \citep{JuliaCall}, which bridges between \texttt{julia} and \texttt{R}, is a single-thread session. Since it is impossible to change the number of threads in the \texttt{julia} session once it starts, a restart of R is required if the \texttt{multithreaded} option is required but has already been initialized without setting the number of threads. 
+Unlike other functions in this \texttt{pimbayes} package, the number of threads for the \texttt{julia} session is crucial due to the \texttt{multithreaded} options. The default option of \texttt{JuliaCall} [@JuliaCall], which bridges between \texttt{julia} and \texttt{R}, is a single-thread session. Since it is impossible to change the number of threads in the \texttt{julia} session once it starts, a restart of R is required if the \texttt{multithreaded} option is required but has already been initialized without setting the number of threads. 
 
 When R starts or restarts, the user can set up a fresh \texttt{julia} session with a given number of threads. 
 
@@ -35,7 +35,7 @@ When R starts or restarts, the user can set up a fresh \texttt{julia} session wi
 init_julia_session_multi(threads = 4)
 ```
 
-Next, the user can use \texttt{sampling()} with the desired number of threads. We use the small number for \texttt{ n\_rounds} to reduce the rendering times of this example code. In practice, using a larger number of \texttt{n\_rounds} is ideal to ensure a sufficient number of iterations, $2^n$.
+Next, the user can use \texttt{sampling()} with the desired number of threads. We use the small number for \texttt{n\_rounds} to reduce the rendering times of this example code. In practice, using a larger number of \texttt{n\_rounds} is ideal to ensure a sufficient number of iterations, $2^n$.
 
 ```{r}
 data(small_count)

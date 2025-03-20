@@ -1,11 +1,10 @@
 Package: pimbayes
 Type: Package
-Title: Comprehensive tools for Bayesian inference with the partially identified model
+Title: Comprehensive tools for Bayesian inference with partially identified models
 Version: 0.1.0
 Author: Seren Lee <seren.lee@stat.ubc.ca>, Paul Gustafson <gustaf@stat.ubc.ca>
 Maintainer: Seren Lee <seren.lee@stat.ubc.ca>
-Description: Diagnose the partially identified model and provide options for the posterior inference with it, 
-    such as the importance sampling with transparent reparameterization (ISTP) and non-reversible Parallel tempering.
+Description: Diagnose a suspected partially identified model and provide options for the posterior inference with it, such as the importance sampling with transparent reparameterization (ISTP) or non-reversible Parallel tempering.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -9,7 +9,7 @@ setup<-function(installJulia = FALSE, JULIA_HOME = NULL){
   library(JuliaCall)
   julia_setup(installJulia = installJulia, JULIA_HOME = JULIA_HOME)
   julia_library("Pkg")
-  julia_do.call("Pkg.add", list(url="https://github.com/Julia-Tempering/Pigeons.jl", rev="juliabugs"))
+  julia_do.call("Pkg.add", list(url="https://github.com/Julia-Tempering/Pigeons.jl"))
   julia_do.call("Pkg.add", list(url="https://github.com/TuringLang/JuliaBUGS.jl"))
   julia_do.call("Pkg.add", list(url = "https://github.com/JuliaIO/FFMPEG.jl"))
   julia_install_package_if_needed("MCMCChains")
