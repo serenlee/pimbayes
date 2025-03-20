@@ -23,9 +23,9 @@ options(digits = 3)
 library(pimbayes)
 ```
 
-Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors on an example of saturated logistic regression with incomplete outcome data introduced in [@lee-2024-issues].
+Package \texttt{pimbayes} supports the importance sampling with transparent reparameterization and convenience priors on an example of saturated logistic regression with incomplete outcome data introduced in [@lee-2024-issues].
 
-The data has three components: the binary response variable $Y$, the binary independent variable $\mathbf{X}  = (X_1, \dots, X_p)^T$, and the indicator variable $R$, which indicates the missingness of $Y$. The binary variable $R$ is 1 when $Y$ is observed and $0$ when $Y$ is unobserved.
+The data have three components: the binary response variable $Y$, the binary independent variables $\mathbf{X}  = (X_1, \dots, X_p)^T$, and the indicator variable $R$, which indicates the missingness of $Y$. The binary variable $R$ is 1 when $Y$ is observed and $0$ when $Y$ is unobserved.
 
 To ease and simplify the calculation and structure of the model, a design matrix of $\mathbf{X}$ and a vector $\xdes \in \mathbb{R}^{2^p}$ representing a row of it is used.
 In mathematical notation, $\xdes  = (X_{0\dots0},\dots,X_{1,\dots1})$ and each entry $X_{i_{1},i_{2},\dots ,i_{p}} = 1$ is 1 if and only if $X_{1} = i_1, X_2 = i_{2}, \dots, X_p = i_p$.
@@ -34,7 +34,8 @@ In mathematical notation, $\xdes  = (X_{0\dots0},\dots,X_{1,\dots1})$ and each e
 \newcommand{\bbR}{\mathbb{R}}
 
 There are multiple vectors of parameters of interest,
-- $\alpha  = (p_{0\dots0}, \dots,p_{1\dots1})^T$ where  $\alpha$ is the simplex of length $2^p$;
+- $\alpha  = (p_{0\dots0}, \dots,p_{1\dots1})^T$  where $\alpha$ belongs to the probability simplex on $2^p$ categories and  
+$p_{i_{1},i_{2},\dots, i_{p}}  = Pr(X_{1} = i_1, X_2 = i_{2}, \dots, X_p = i_p)$;
 - $\beta  \in \mathbb{R}^{2^p};$
 - $\gamma \in \mathbb{R}^{2^p};$
 - $\delta \in \mathbb{R}^{2^p}.$
@@ -61,6 +62,8 @@ Priors for these parameters are
 
 ## Data
 
+Two mock datasets are available, \texttt{small\_sat} and \texttt{sat}. The codes for creating the mock data are also available in the folder \texttt{data-raw}.
+Data $\texttt{small\_sat}$ is created from a small simulation with $n =100$ and $p =2$.
 
 ```{r}
 data(small_sat)
@@ -94,8 +97,7 @@ for(i in 1:p2){
 
 ## Sampling
 
-When data and JAGS code are given with the desired posterior sample size, the function sampling will return posterior samples along with ESS.
-
+When data and JAGS code are given with the desired posterior sample size, the function \texttt{sampling()} will return posterior samples along with ESS.
 ```{r message = F}
 n = length(small_sat$r)
 p = log2(dim(small_sat$x)[2])

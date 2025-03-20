@@ -21,33 +21,35 @@ library(pimbayes)
 
 ### Problem specification
 
-Package \texttt{istp} supports the importance sampling with transparent reparameterization and convenience priors for the problem called cross-sectional studies [@Pirikahu-2021-bcicc].
+Package \texttt{pimbayes} supports the importance sampling with transparent reparameterization and convenience priors for the problem called cross-sectional studies [@Pirikahu-2021-Bayesian].
 
-Data is given in a two-by-two table. 
 
+The ideal data we wish we had is described with the following table:
 |               |$D^+$          | $D^-$ |
 | ------------- |:-------------:| :-----:|
 | $E^+$    |  $x_{11}$ |  $x_{12}$|
 | $E^-$    | $x_{21}$  |  $x_{12}$|
+where $D+$ and $D^-$ indicate diseased or not and $E^+$ and $E^-$ indicate exposure to the risk factor or not. In addition, variables $T^+, T^-$ are for positive and negative results of the diagnostic test. Since the test is imperfect, positive test results do not necessarily mean diseased. This also applies to negative results; there is still a chance of actually being diseased.
+The parameters of interest are test sensitivity, $S_e$, specificity, $S_p$, and probabilities of each cell, $\pi_{11} = Pr(E^+ \cap D^+), \pi_{12} = Pr(E^+ \cap  D^-), \pi_{21} = Pr(E^- \cap  D^+).$ The remaining cell probability, $\pi_{22}$ is omitted because it is a function of the other three probabilities, $\pi_{22} = 1 - \pi_{11} - \pi_{12} - \pi_{21}$.
+However, the distribution of $D$ is not directly learnable, which means the distribution of $(E \mid D)$ is also not learnable. Therefore, the actual model is specified with the distributions of $(D, E)$ and $(T \mid D)$. Then, the distribution of $(E \mid D)$ is found under the assumption of independence between the test results and the exposure given the disease status, which is conditional independence of $(T, E \mid D)$. The distributions of $(D, E)$ and $(T \mid D)$ imply the distribution of $(T, D)$, the multinomial distribution with parameters $\eta_{ij}$ instead of $\pi_{ij}$. The probabilities $\eta$ are the function of the original parameters as follows:
+\begin{align*}
+\eta_{11} &= Pr(T^+ \cap D^+) \\&= S_e \pi_{11} + (1-S_p)\pi_{21},\\
+\eta_{12} &= Pr(T^+ \cap D^-) \\&=S_e \pi_{12} + (1-S_e)\pi_{22},\\
+\eta_{21} &= Pr(T^- \cap D^+) \\&= S_p \pi_{21} + (1-S_e)\pi_{11}, \\
+\eta_{22} &= Pr(T^- \cap D^-) \\&= (1-S_e) \pi_{12} + S_p\pi_{22}.
+\end{align*}
+The original parameterization $S_e, S_p, \pi_{11},\pi_{22}, \pi_{21}$ scientifically makes sense. However, while the multinomial data can only describe three things, there are five unknown parameters. 
 
-where $D+, D^-$ indicate diseased or not and $E^+,E^-$ indicate exposure to the risk factor or not.
-Parameter of interests are test sensitivity, $S_e$, specificity, $S_p$, and probabilities of each cell, $\pi_{11} = Pr(E^+ \cap D^+), \pi_{12} = Pr(E^+ \cap  D^-), \pi_{21} = Pr(E^- \cap  D^+)$
-However, since this test is imperfect, the actual model is specified with multinomial distribution with $\eta_{ij}$ instead of $\pi_{ij}$ where \begin{align}
-\eta_{11} &= Pr(T^+ \cap D^+) &= S_e \pi_{11} + (1-S_p)\pi_{21}\\
-\eta_{12} &= Pr(T^+ \cap D^-) &=S_e \pi_{12} + (1-S_e)\pi_{22}\\
-\eta_{21} &= Pr(T^- \cap D^+) &= S_p \pi_{21} + (1-S_e)\pi_{11}\\
-\eta_{22} &= Pr(T^- \cap D^-) &= (1-S_e) \pi_{12} + S_p\pi_{22}\\
-\end{align}
+The package stores a mock dataset, which is created with specificity and sensitivity of 0.95 and $\pi = (0.15, 0.35, 0.20, 0.30)$. The codes for creating the mock data are also available in the folder \texttt{data-raw}.
 
 ```{r}
 data(cross)
 print(cross)
 ```
 
-The data is a vector with four entries, each representing the count of each category $(1,1), (1,2), (2,1), (2,2)$ in the contingency table below.
+The data is a vector with four entries, each representing the count of each category $(1,1), (1,2), (2,1), (2,2)$ in the contingency table above.
 
-
-The applicable JAGS code is:
+JAGS code with priors used in [@Pirikahu-2021-Bayesian] for this example is as follows:
 
 ```{r}
 jags_code <-
@@ -63,7 +65,7 @@ jags_code <-
 }"
 ```
 
-When data and JAGS code are given with the desired posterior sample size, the function sampling will return posterior samples along with ESS.
+In this code, the names of the parameters in $\theta$ and the prior distributions are editable. Then, results are returned with ESS and $N$ samples from the posterior density.
 
 ```{r message = F}
 data <- list(y = cross, n = sum(cross))
@@ -72,6 +74,8 @@ results = sampling(jags_code, data, type = "cross", N = 1000)
 results$ess
 head(results$samples)
 ```
+
+All results are returned in the type of \texttt{list}.
 
 # References
 

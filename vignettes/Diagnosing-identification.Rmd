@@ -15,15 +15,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup}
+library(pimbayes)
+```
+
 This document covers how to use the function `diagnose_identification` to diagnose the identification of the model numerically.
 
 Basically, `diagnose_identification` takes three steps.
 
 1. Approximate the Fisher information matrix.
 
-2. Find the condition number and the rank of the Fisher information matrix and asymptotic variance of parameters.
+2. Find the condition number and rank of this matrix and, if invertible, the asymptotic variance of the parameter estimators.
 
-3. Raise the flag that warns the large extent of the identification in a given model.
+3. If warranted, raise a flag that warns about the partial or very weak identification in a given model.
 
 It requires the five arguments below.
 
@@ -33,18 +37,7 @@ It requires the five arguments below.
 
 3. `variable.names`
 
-4. `ll_fun`: A log-likelihood function that takes `data` and `theta` as arguments. The type and structure of `data` must match the return type of `data_fun`.
-
-5. `data_fun`: A function that creates data with a given `theta` (a vector of parameters). `data_fun` will take an argument `args`, which includes `theta` and necessary input for generating data.
-
-
-## Revisiting cross-sectional studies data example
-
-Apply this function to the model and data in [Sampling-cross](Sampling-cross.html)
-
-```{r setup}
-library(pimbayes)
-```
+4. `ll_fun`: A log-likelihood function that takes \texttt{data} and \texttt{theta} as arguments. The type and structure of \texttt{data} must match the return type of \texttt{data\_fun}.
 
 ```{r}
 ll_cross <- function(data, theta){
@@ -58,7 +51,12 @@ ll_cross <- function(data, theta){
            (1-se)*pi[2]+sp*pi[4])
   log(dmultinom(data, prob = eta))
 }
+```
 
+
+5. `data_fun`: A function that creates data with a given \texttt{theta} (a vector of parameters). \texttt{data\_fun} will take an argument \texttt{args}, which includes \texttt{theta} and the input necessary to generate the data.
+
+```{r}
 data_cross <- function(args) {
   theta = args$theta
   n = args$n
@@ -72,6 +70,15 @@ data_cross <- function(args) {
            (1-se)*pi[2]+sp*pi[4])
   as.vector(rmultinom(1, size = n, prob = eta))
 }
+```
+
+
+## Revisiting cross-sectional studies data example
+
+The above arguments are written for \texttt{small\_cross} in [Sampling-cross](Sampling-cross.html).
+
+```{r}
+data(small_cross)
 
 jags_code <- "model { 
 y[1:4] ~ dmulti(eta[1:4], n)
@@ -83,7 +90,6 @@ y[1:4] ~ dmulti(eta[1:4], n)
     se ~ dbeta(25,3)
     sp ~ dbeta(30,1.5)
   }"
-data(small_cross)
 data = list(y = small_cross, n = sum(small_cross))
 diagnose_identification(jags_code, data,
                         c("se","sp","pi[1]","pi[2]","pi[3]"),
