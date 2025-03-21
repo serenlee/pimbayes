@@ -15,12 +15,13 @@ Depends:
     rje,
     rjags
 Imports:
-    pracma
+    pracma,
+    gtools,
+    stringr
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    ggplot2,
-    pracma
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr

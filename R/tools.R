@@ -16,7 +16,6 @@ check_integer <- function(x){
 }
 
 parse_jags_code <- function(jags_code, data, is_data_info_required = T) {
-  require(JuliaCall)
   julia_library("JuliaBUGS")
   julia_library("LinearAlgebra")
   julia_command("JuliaBUGS.@register_primitive function Int64wrapper(vec::Vector)

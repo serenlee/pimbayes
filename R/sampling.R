@@ -177,8 +177,7 @@ istp.cross<-function(jags_code, data, N){
 }
 
 # Internal function
-pigeons<-function(model.object, data, extract_variable_names, n_chains, n_rounds, extended_traces){
-  require(JuliaCall)
+pigeons<-function(jags_code, data, extract_variable_names, n_chains, n_rounds, extended_traces){
   julia_library("Pigeons")
   parse_jags_code(jags_code,data, FALSE)
   julia_command("target= JuliaBUGSPath(model)")

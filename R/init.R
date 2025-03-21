@@ -6,7 +6,6 @@
 #' @param JULIA_HOME (Optional) string indicating the location of specific Julia binary
 #' @export
 setup<-function(installJulia = FALSE, JULIA_HOME = NULL){
-  library(JuliaCall)
   julia_setup(installJulia = installJulia, JULIA_HOME = JULIA_HOME)
   julia_library("Pkg")
   julia_do.call("Pkg.add", list(url="https://github.com/Julia-Tempering/Pigeons.jl"))
