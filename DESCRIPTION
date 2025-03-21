@@ -2,9 +2,12 @@ Package: pimbayes
 Type: Package
 Title: Comprehensive tools for Bayesian inference with partially identified models
 Version: 0.1.0
-Author: Seren Lee <seren.lee@stat.ubc.ca>, Paul Gustafson <gustaf@stat.ubc.ca>
+Authors@R: c(person("Seren", "Lee", role = c("aut","cre"), email = "seren.lee@stat.ubc.ca", comment=c(ORCID="0009-0001-3739-5857")), person("Paul", "Gustafson", role = "aut", comment = c(ORCID="0000-0002-2375-5006")))
 Maintainer: Seren Lee <seren.lee@stat.ubc.ca>
-Description: Diagnose a suspected partially identified model and provide options for the posterior inference with it, such as the importance sampling with transparent reparameterization (ISTP) or non-reversible Parallel tempering.
+Description: Diagnose a suspected partially identified model and provide options for the posterior inference with it, such as the importance sampling with transparent reparameterization (ISTP) or non-reversible Parallel tempering: 
+  - ISTP algorthm is described in Lee and Gustafson (2024) <doi:10.48550/arXiv.2408.10416>,
+  - A usage of non-reversible parallel tempering method is enabled by Pigeson.jl package Surjanovic et al. (2023) <doi:10.48550/arXiv.2308.09769>,
+  - Diagnosing a suspected partially identified model is based on approximating the Fisher information matrix introduced in Spall (2005) <doi:10.1198/106186005X78800>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -25,3 +28,5 @@ Suggests:
     ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://github.com/serenlee/pimbayes
+BugReports: https://github.com/serenlee/pimbayes/issues
