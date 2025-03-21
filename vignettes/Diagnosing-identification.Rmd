@@ -23,7 +23,7 @@ This document covers how to use the function `diagnose_identification` to diagno
 
 Basically, `diagnose_identification` takes three steps.
 
-1. Approximate the Fisher information matrix.
+1. Approximate the Fisher information matrix, using the method described in [@spall2005monte].
 
 2. Find the condition number and rank of this matrix and, if invertible, the asymptotic variance of the parameter estimators.
 
