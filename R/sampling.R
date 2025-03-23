@@ -30,7 +30,10 @@
 #' }"
 #' data(small_cross)
 #' data = list(y = small_cross, n = sum(small_cross))
-#' sampling(jags_code, data, "cross", N = 15000)
+#' results = sampling(jags_code, data, "cross", N = 15000)
+#' results$ess
+#' head(results$samples)
+#'
 #' data(small_sat)
 #' sigma = 0.5 #Hyperparameter, prior variance of log odds ratios
 #' data = c(small_sat, list(n = length(small_sat$r),
@@ -53,7 +56,12 @@
 #'     log_or_r[i] ~ dnorm(0, tau)
 #'   }
 #' }"
-#' sampling(jags_code, data, "sat", N = 15000)
+#' results = sampling(jags_code, data, "sat", N = 15000)
+#'
+#' results$ess
+#' head(results$samples)
+#'
+#'
 #' jags_code <- "model{
 #' for (i in 1:n) {
 #' r[i] ~ dbern(pr[i])
@@ -134,7 +142,9 @@ sampling<-function(jags_code, data, type = c("sat", "cross", "pigeons"), extract
 #' return(c(pi11,pi12,pi21,se,sp))
 #' }
 #' var_name = c(paste0("pi","[",c(11,12,21),"]"),"se","sp")
-#' istp.manual(posterior_fun, h_cross_inv, 15000, weight_fun, var_name)
+#' results = istp.manual(posterior_fun, h_cross_inv, 15000, weight_fun, var_name)
+#' head(results$samples)
+#' results$ess
 #' @export
 istp.manual<-function(posterior_fun, h_inv, N, weight_fun, var_names){
   if(N <= 0) stop("Posterior sample size N > 0")

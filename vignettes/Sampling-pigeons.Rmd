@@ -1,7 +1,6 @@
 ---
 title: "Sampling with Pigeons.jl"
-output: 
-  latex_document
+output: rmarkdown::html_vignette
 bibliography: biblio.bib  
 vignette: >
   %\VignetteIndexEntry{Sampling-pigeons}
@@ -23,19 +22,19 @@ library(pimbayes)
 
 ## Sampling with Pigeons.jl
 
-It is possible to obtain MCMC samples from posterior distributions using the \texttt{julia} package \texttt{Pigeons.jl} [@surjanovic2023pigeons], which may have better MCMC performance with the partially identified model thanks to the non-reversible {PT} [@syed-2021-Non-Reversible].
+It is possible to obtain MCMC samples from posterior distributions using the `julia` package `Pigeons.jl` [@surjanovic2023pigeons], which may have better MCMC performance with the partially identified model thanks to the non-reversible PT [@syed-2021-Non-Reversible].
 
 ### Multithreaded option for `pigeons` sampling
 
-Unlike other functions in this \texttt{pimbayes} package, the number of threads for the \texttt{julia} session is crucial due to the \texttt{multithreaded} options. The default option of \texttt{JuliaCall} [@JuliaCall], which bridges between \texttt{julia} and \texttt{R}, is a single-thread session. Since it is impossible to change the number of threads in the \texttt{julia} session once it starts, a restart of R is required if the \texttt{multithreaded} option is required but has already been initialized without setting the number of threads. 
+Unlike other functions in this `pimbayes` package, the number of threads for the `julia` session is crucial due to the `multithreaded` options. The default option of `JuliaCall` [@R-JuliaCall], which bridges between `julia` and `R`, is a single-thread session. Since it is impossible to change the number of threads in the `julia` session once it starts, a restart of R is required if the `multithreaded` option is required but has already been initialized without setting the number of threads. 
 
-When R starts or restarts, the user can set up a fresh \texttt{julia} session with a given number of threads. 
+When R starts or restarts, the user can set up a fresh `julia` session with a given number of threads. 
 
 ```{r}
 init_julia_session_multi(threads = 4)
 ```
 
-Next, the user can use \texttt{sampling()} with the desired number of threads. We use the small number for \texttt{n\_rounds} to reduce the rendering times of this example code. In practice, using a larger number of \texttt{n\_rounds} is ideal to ensure a sufficient number of iterations, $2^n$.
+Next, the user can use `sampling()` with the desired number of threads. We use the small number for `n_rounds` to reduce the rendering times of this example code. In practice, using a larger number of `n_rounds` is ideal to ensure a sufficient number of iterations, $2^n$.
 
 ```{r}
 data(small_count)
@@ -60,7 +59,7 @@ pt = sampling(jags_code,
 ```
 
 
-Using functions \texttt{pigeons\_samples} and \texttt{pigeons\_plots}, it is possible to check the results. The following matrix shows the first six rows of the output, which are samples from the posterior distributions. 
+Using functions `pigeons_samples` and `pigeons_plots`, it is possible to check the results. The following matrix shows the first six rows of the output, which are samples from the posterior distributions. 
 
 ```{r}
 head(pigeons_samples(pt))
@@ -73,7 +72,7 @@ pigeons_plots(pt)
 ```
 
 
-There are two options for the plot. The default option of \texttt{Pigeons.jl} is saving the samples of target distribution only as above. However, it is also possible to save all chains with \texttt{extended\_traces} option. When the option is enabled, the plot shows each tempered chain in different colours as below.
+There are two options for the plot. The default option of `Pigeons.jl` is saving the samples of target distribution only as above. However, it is also possible to save all chains with `extended_traces` option. When the option is enabled, the plot shows each tempered chain in different colours as below.
 
 ```{r}
 pt = sampling(jags_code, data, "pigeons", extract_variable_names = c("mu","alpha0","alpha1"), n_chains =  4, n_rounds = 4, extended_traces = T)

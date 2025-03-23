@@ -60,5 +60,7 @@ pi21 = 1/denom*((se-1)*eta11 + se*eta21)
 return(c(pi11,pi12,pi21,se,sp))
 }
 var_name = c(paste0("pi","[",c(11,12,21),"]"),"se","sp")
-istp.manual(posterior_fun, h_cross_inv, 15000, weight_fun, var_name)
+results = istp.manual(posterior_fun, h_cross_inv, 15000, weight_fun, var_name)
+head(results$samples)
+results$ess
 }

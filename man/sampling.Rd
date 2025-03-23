@@ -57,7 +57,10 @@ sp ~ dbeta(30,1.5)
 }"
 data(small_cross)
 data = list(y = small_cross, n = sum(small_cross))
-sampling(jags_code, data, "cross", N = 15000)
+results = sampling(jags_code, data, "cross", N = 15000)
+results$ess
+head(results$samples)
+
 data(small_sat)
 sigma = 0.5 #Hyperparameter, prior variance of log odds ratios
 data = c(small_sat, list(n = length(small_sat$r),
@@ -80,7 +83,12 @@ jags_code  <- "model{
     log_or_r[i] ~ dnorm(0, tau)
   }
 }"
-sampling(jags_code, data, "sat", N = 15000)
+results = sampling(jags_code, data, "sat", N = 15000)
+
+results$ess
+head(results$samples)
+
+
 jags_code <- "model{
 for (i in 1:n) {
 r[i] ~ dbern(pr[i])

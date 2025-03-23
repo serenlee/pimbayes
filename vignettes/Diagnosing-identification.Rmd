@@ -37,7 +37,7 @@ It requires the five arguments below.
 
 3. `variable.names`
 
-4. `ll_fun`: A log-likelihood function that takes \texttt{data} and \texttt{theta} as arguments. The type and structure of \texttt{data} must match the return type of \texttt{data\_fun}.
+4. `ll_fun`: A log-likelihood function that takes `data` and `theta` as arguments. The type and structure of `data` must match the return type of `data_fun`.
 
 ```{r}
 ll_cross <- function(data, theta){
@@ -54,7 +54,7 @@ ll_cross <- function(data, theta){
 ```
 
 
-5. `data_fun`: A function that creates data with a given \texttt{theta} (a vector of parameters). \texttt{data\_fun} will take an argument \texttt{args}, which includes \texttt{theta} and the input necessary to generate the data.
+5. `data_fun`: A function that creates data with a given `theta` (a vector of parameters). `data_fun` will take an argument `args`, which includes `theta` and the input necessary to generate the data.
 
 ```{r}
 data_cross <- function(args) {
@@ -75,7 +75,7 @@ data_cross <- function(args) {
 
 ## Revisiting cross-sectional studies data example
 
-The above arguments are written for \texttt{small\_cross} in [Sampling-cross](Sampling-cross.html).
+The above arguments are written for `small_cross` in [Sampling-cross](Sampling-cross.html).
 
 ```{r}
 data(small_cross)

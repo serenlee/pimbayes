@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(pimbayes)
 ```
 
-If required functions and variable names are provided, sampling with the \texttt{ISTP} will be performed with a function \texttt{istp.manual()}.
+If required functions and variable names are provided, sampling with the `ISTP` will be performed with a function `istp.manual()`.
 Let's apply this function to the example. Please see [Sampling-cross](Sampling-cross.html) for the example specification.
 The required arguments are as follows. 
 
