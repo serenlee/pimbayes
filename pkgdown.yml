@@ -1,0 +1,10 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  Diagnosing-identification: Diagnosing-identification.html
+  Sampling-cross-manual: Sampling-cross-manual.html
+  Sampling-cross: Sampling-cross.html
+  Sampling-pigeons: Sampling-pigeons.html
+  Sampling-sat: Sampling-sat.html
+last_built: 2025-03-23T09:56Z

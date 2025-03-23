@@ -1,0 +1,25 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/Diagnosing-identification.html</loc></url>
+<url><loc>/articles/Sampling-cross-manual.html</loc></url>
+<url><loc>/articles/Sampling-cross.html</loc></url>
+<url><loc>/articles/Sampling-pigeons.html</loc></url>
+<url><loc>/articles/Sampling-sat.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/count.html</loc></url>
+<url><loc>/reference/cross.html</loc></url>
+<url><loc>/reference/diagnose_identification.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/init_julia_session_multi.html</loc></url>
+<url><loc>/reference/istp.manual.html</loc></url>
+<url><loc>/reference/pigeons_plots.html</loc></url>
+<url><loc>/reference/pigeons_samples.html</loc></url>
+<url><loc>/reference/sampling.html</loc></url>
+<url><loc>/reference/sat.html</loc></url>
+<url><loc>/reference/setup.html</loc></url>
+</urlset>
+
