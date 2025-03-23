@@ -28,5 +28,5 @@ Suggests:
     ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/serenlee/pimbayes
+URL: https://github.com/serenlee/pimbayes, https://serenlee.github.io/pimbayes
 BugReports: https://github.com/serenlee/pimbayes/issues
